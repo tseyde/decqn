@@ -1,0 +1,15 @@
+name: decqn
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.8
+  - pip
+  - cudatoolkit=11.2
+  - cudnn=8.1.0
+  - pip:
+    - dm-acme[jax,tf]==0.4.0
+    - dm-acme[envs]==0.4.0
+    - dm-control==1.0.7
+    - ffmpeg-python==0.2.0
+    - seaborn==0.12.0
