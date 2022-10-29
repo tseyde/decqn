@@ -31,6 +31,18 @@ Simple implementation of the Decoupled Q-networks (DecQN) agent in TensorFlow 2.
 
 This assumes a linear value function decomposition and treats single-agent continuous control as a multi-agent discrete control problem. The key difference to the original DQN agent is the reduced number of output dimensions of the Q-network and the additional aggregation across action dimensions. The remaining structure of the original agent may be left unchanged.
 
+## Reference
+
+If you find our agent or code useful in your own research, please refer to our paper:
+```
+@article{seyde2022solving,
+  title={Solving Continuous Control via Q-learning},
+  author={Seyde, Tim and Werner, Peter and Schwarting, Wilko and Gilitschenski, Igor and Riedmiller, Martin and Rus, Daniela and Wulfmeier, Markus},
+  journal={arXiv preprint arXiv:2210.12566},
+  year={2022}
+}
+```
+
 ## Benchmark performance
 Performance on a variety of tasks from the DeepMind Control Suite as well as MetaWorld.
 
