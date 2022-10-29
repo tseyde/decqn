@@ -259,3 +259,45 @@ class ActionRepeatWrapper(base.EnvironmentWrapper):
         break
     
     return timestep
+
+
+import gym
+from acme.wrappers import GymWrapper
+
+class MetaWorldWrapper(GymWrapper):
+
+  def __init__(self, environment: gym.Env, truncated=True, duration=1000):
+
+    self._trunc = truncated
+    self._steps = duration
+    self._step = None
+    super().__init__(environment)
+
+  def reset(self) -> dm_env.TimeStep:
+    self._step = 0
+    return super().reset()
+
+  def step(self, action: types.NestedArray) -> dm_env.TimeStep:
+    """Steps the environment."""
+    if self._reset_next_step:
+      return self.reset()
+
+    observation, reward, done, info = self._environment.step(action)
+
+    if done and (self._step+1 < self._steps) and not self._trunc:
+      done = False
+
+    if self._step+1 > self._steps-1:
+      '''Keep this in mind: https://github.com/rlworkgroup/metaworld/issues/236'''
+      done = True
+
+    self._reset_next_step = done
+
+    self._step += 1
+
+    if done:
+      truncated = info.get('TimeLimit.truncated', False)
+      if truncated:
+        return dm_env.truncation(reward, observation)
+      return dm_env.termination(reward, observation)
+    return dm_env.transition(reward, observation)

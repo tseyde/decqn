@@ -148,26 +148,41 @@ def main(config):
     import random
     random.seed(config.seed)
 
-    
-    environment = suite.load(domain_name, task_name, task_kwargs=dict(random=config.seed))
-    config.original_action_spec = environment.action_spec().replace(dtype=np.float32)
-    if config.decouple:
-        from wrappers import DecoupledDiscreteWrapper
-        environment = DecoupledDiscreteWrapper(environment, config)
+    if domain_name=="metaworld":
+      # ----- Sample code for interfacing MetaWorld -----
+      import metaworld
+      from wrappers import MetaWorldWrapper
+      mt1 = metaworld.MT1(task_name)
+      environment = mt1.train_classes[task_name]()
+      task = random.choice(mt1.train_tasks)
+      environment.set_task(task)
+      environment.seed(config.seed)
+      environment = MetaWorldWrapper(environment, duration=environment.max_path_length)
+      if config.decouple:
+          environment = DecoupledDiscreteWrapper(environment, config)
+      else:
+          environment = DiscreteWrapper(environment, config)
+
     else:
-        from wrappers import DiscreteWrapper
-        environment = DiscreteWrapper(environment, config)
-    if config.use_pixels:
-        from wrappers import DMCVisionWrapper
-        environment = DMCVisionWrapper(
-            environment, 
-            domain_name, 
-            action_repeat=config.action_repeat,
-            size=(config.num_pixels, config.num_pixels)
-          )
-    else:
-        from wrappers import CustomConcatObservationWrapper
-        environment = CustomConcatObservationWrapper(environment)
+      environment = suite.load(domain_name, task_name, task_kwargs=dict(random=config.seed))
+      config.original_action_spec = environment.action_spec().replace(dtype=np.float32)
+      if config.decouple:
+          from wrappers import DecoupledDiscreteWrapper
+          environment = DecoupledDiscreteWrapper(environment, config)
+      else:
+          from wrappers import DiscreteWrapper
+          environment = DiscreteWrapper(environment, config)
+      if config.use_pixels:
+          from wrappers import DMCVisionWrapper
+          environment = DMCVisionWrapper(
+              environment, 
+              domain_name, 
+              action_repeat=config.action_repeat,
+              size=(config.num_pixels, config.num_pixels)
+            )
+      else:
+          from wrappers import CustomConcatObservationWrapper
+          environment = CustomConcatObservationWrapper(environment)
 
     environment = wrappers.SinglePrecisionWrapper(environment)
     return environment
@@ -240,7 +255,7 @@ if __name__ == '__main__':
   config.seed = 0
 
   # ### Algorithm ###
-  config.algorithm = 'decqnvis'
+  config.algorithm = 'decqn'  # 'decqnvis'
   config.num_bins = 2
 
   config.use_double_q = True
