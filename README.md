@@ -1,5 +1,5 @@
 # Solving continuous control via Q-learning
-Simple implementation of the [Decoupled Q-networks (DecQN) agent](https://arxiv.org/pdf/2210.12566.pdf) in TensorFlow 2. The implementation is based on the Acme library and follows their overall design patterns with additional customization of the run loop and logging, as well as agent definition. This is a minimal re-implementation that streamlines agent definition and should yield the performance reported in our accompanying paper.
+Simple implementation of the [Decoupled Q-networks (DecQN) agent](https://arxiv.org/abs/2210.12566) in TensorFlow 2. The implementation is based on the Acme library and follows their overall design patterns with additional customization of the run loop and logging, as well as agent definition. This is a minimal re-implementation that streamlines agent definition and should yield the performance reported in our accompanying paper.
 
 
 ## Installation
@@ -33,7 +33,7 @@ This assumes a linear value function decomposition and treats single-agent conti
 
 ## Reference
 
-If you find our agent or code useful in your own research, please refer to [our paper](https://arxiv.org/pdf/2210.12566.pdf):
+If you find our agent or code useful in your own research, please refer to [our paper](https://arxiv.org/abs/2210.12566):
 ```
 @article{seyde2022solving,
   title={Solving Continuous Control via Q-learning},
